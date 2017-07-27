@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.GroupTourDetailDAO">
+
+    <!--添加GroupTourDetail对象-->
+    <insert id="createGroupTourDetail" useGeneratedKeys="true" keyProperty="groupTourDetailPO.id">
+        INSERT  into group_tour_detail(group_tour_id,departure_time,end_time,price,
+        stock,available,
+        gmt_create,gmt_modified)
+        VALUES (#{groupTourDetailPO.groupTourId},#{groupTourDetailPO.departureTime},#{groupTourDetailPO.endTime},
+        #{groupTourDetailPO.price},#{groupTourDetailPO.stock},
+        #{groupTourDetailPO.available},now(),now())
+    </insert>
+
+    <!--更新GroupTourDetail对象-->
+    <update id="updateGroupTourDetail">
+        UPDATE
+        group_tour_detail
+        <set>
+            <if test="groupTourDetailPO.departureTime != null">
+                departure_time = #{groupTourDetailPO.departureTime},
+            </if>
+            <if test="groupTourDetailPO.endTime != null">
+                end_time = #{groupTourDetailPO.endTime},
+            </if>
+            <if test="groupTourDetailPO.price != null">
+                price = #{groupTourDetailPO.price},
+            </if>
+            <if test="groupTourDetailPO.stock != null">
+                stock = #{groupTourDetailPO.stock},
+            </if>
+            <if test="groupTourDetailPO.available != null">
+                available = #{groupTourDetailPO.available},
+            </if>
+                gmt_modified = now()
+        </set>
+        WHERE id = #{groupTourDetailPO.id}
+    </update>
+
+    <!--删除GroupTourDetail对象-->
+    <delete id="deleteGroupTourDetail">
+        DELETE  FROM group_tour_detail WHERE  id = #{groupTourDetailId}
+    </delete>
+
+    <!--删除GroupTourDetail对象-->
+    <delete id="deleteDetailsByGroupTourId">
+        DELETE  FROM group_tour_detail WHERE  group_tour_id = #{groupTourId}
+    </delete>
+
+    <!--根据id查找GroupTourDetail对象-->
+    <select id="findOne" resultType="GroupTourDetailPO">
+        SELECT
+        id, group_tour_id, departure_time, end_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM group_tour_detail WHERE  id = #{groupTourDetailId}
+    </select>
+
+    <!--根据跟团游id查找GroupTourDetail对象-->
+    <select id="findAllByGroupTourId" resultType="GroupTourDetailPO">
+        SELECT
+        id, group_tour_id, departure_time, end_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM group_tour_detail WHERE  group_tour_id = #{groupTourId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="GroupTourDetailPO">
+        SELECT
+        id, group_tour_id, departure_time, end_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM group_tour_detail
+    </select>
+
+</mapper>

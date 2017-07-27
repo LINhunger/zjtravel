@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.ResourceDAO">
+
+    <!--插入resource对象-->
+    <insert id="createResource" useGeneratedKeys="true" keyProperty="resourcePO.id">
+        INSERT  into resource(name,type,url,permission,parent_id,parent_ids,
+        available,gmt_create,gmt_modified)
+        VALUES (#{resourcePO.name},#{resourcePO.type},#{resourcePO.url},
+        #{resourcePO.permission},#{resourcePO.parentId},#{resourcePO.parentIds},
+        #{resourcePO.available},now(),now())
+    </insert>
+
+    <!--更新resource对象-->
+    <update id="updateResource">
+        UPDATE
+        resource
+        <set>
+            <if test="resourcePO.name != null and resourcePO.name != ''">
+                `name` = #{resourcePO.name},
+            </if>
+            <if test="resourcePO.type != null">
+                `type` = #{resourcePO.type},
+            </if>
+            <if test="resourcePO.url != null and resourcePO.url != ''">
+                url = #{resourcePO.url},
+            </if>
+            <if test="resourcePO.permission != null and resourcePO.permission != ''">
+                permission = #{resourcePO.permission},
+            </if>
+            <if test="resourcePO.parentId != null">
+                parent_id = #{resourcePO.parentId},
+            </if>
+            <if test="resourcePO.parentIds != null and resourcePO.parentIds != ''">
+                parent_ids = #{resourcePO.parentIds},
+            </if>
+            <if test="resourcePO.available != null">
+                available = #{resourcePO.available},
+            </if>
+                gmt_modified = now()
+        </set>
+        WHERE id = #{resourcePO.id}
+    </update>
+
+    <!--删除resource对象-->
+    <delete id="deleteResource">
+        DELETE  FROM resource WHERE  id = #{resourceId}
+    </delete>
+    <!--删除以该resource对象为父节点的对象-->
+    <delete id="deleteSubResource">
+        DELETE  FROM resource WHERE  parent_ids like concat(#{selfParent}, "%")
+    </delete>
+    <!--根据id查找用户对象-->
+    <select id="findOne" resultType="ResourcePO">
+        SELECT
+        id, name, type, url, permission, parent_id, parent_ids, available,
+        gmt_create,gmt_modified
+        FROM resource WHERE  id = #{resourceId}
+        order by concat(parent_ids, id) asc
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="ResourcePO">
+        SELECT
+         id, name, type, url, permission, parent_id, parent_ids, available,
+        gmt_create,gmt_modified
+        FROM resource
+        order by concat(parent_ids, id) asc
+    </select>
+</mapper>

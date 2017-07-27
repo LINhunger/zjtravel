@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.WalletDAO">
+
+    <!--添加Wallet对象-->
+    <insert id="createWallet" useGeneratedKeys="true" keyProperty="walletPO.userId">
+        INSERT  into wallet(user_id,money)
+        VALUES (#{walletPO.userId},#{walletPO.money})
+    </insert>
+
+    <!--更新Wallet对象-->
+    <update id="updateWallet">
+        UPDATE
+        wallet
+        SET money = #{walletPO.money}
+        WHERE user_id = #{walletPO.userId}
+    </update>
+
+    <!--删除Wallet对象-->
+    <delete id="deleteWallet">
+        DELETE  FROM wallet WHERE  user_id = #{userId}
+    </delete>
+
+    <!--根据id查找wallet对象-->
+    <select id="findOne" resultType="WalletPO">
+        SELECT
+        user_id,  money
+        FROM wallet WHERE  user_id = #{userId}
+    </select>
+</mapper>

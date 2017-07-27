@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.DiscountDAO">
+
+    <!--添加Discount对象-->
+    <insert id="createDiscount" useGeneratedKeys="true" keyProperty="discountPO.id">
+        INSERT  into discount(title,percent,
+        available,
+        gmt_create,gmt_modified)
+        VALUES (#{discountPO.title},#{discountPO.percent},
+        #{discountPO.available},now(),now())
+    </insert>
+
+    <!--更新Discount对象-->
+    <update id="updateDiscount">
+        UPDATE
+        discount
+        <set>
+            <if test="discountPO.title != null and discountPO.title != ''">
+                title = #{discountPO.title},
+            </if>
+            <if test="discountPO.percent != null">
+                percent = #{discountPO.percent},
+            </if>
+            <if test="discountPO.available != null">
+                available = #{discountPO.available},
+            </if>
+                gmt_modified = now()
+        </set>
+        WHERE id = #{discountPO.id}
+    </update>
+
+    <!--删除Discount对象-->
+    <delete id="deleteDiscount">
+        DELETE  FROM  discount WHERE  id = #{discountId}
+    </delete>
+
+    <!--根据id查找Discount对象-->
+    <select id="findOne" resultType="DiscountPO">
+        SELECT
+        id, title,percent,available,
+        gmt_create,gmt_modified
+        FROM  discount WHERE  id = #{discountId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="DiscountPO">
+        SELECT
+        id, title,percent,available,
+        gmt_create,gmt_modified
+        FROM  discount
+    </select>
+
+</mapper>

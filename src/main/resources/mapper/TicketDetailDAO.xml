@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.TicketDetailDAO">
+
+    <!--添加TicketDetail对象-->
+    <insert id="createTicketDetail" useGeneratedKeys="true" keyProperty="ticketDetailPO.id">
+        INSERT  into ticket_detail(ticket_id,departure_time,price,
+        stock,available,
+        gmt_create,gmt_modified)
+        VALUES (#{ticketDetailPO.ticketId},#{ticketDetailPO.departureTime},
+        #{ticketDetailPO.price},#{ticketDetailPO.stock},
+        #{ticketDetailPO.available},now(),now())
+    </insert>
+
+    <!--更新TicketDetail对象-->
+    <update id="updateTicketDetail">
+        UPDATE
+        ticket_detail
+        <set>
+            <if test="ticketDetailPO.departureTime != null">
+                departure_time = #{ticketDetailPO.departureTime},
+            </if>
+            <if test="ticketDetailPO.price != null">
+                price = #{ticketDetailPO.price},
+            </if>
+            <if test="ticketDetailPO.stock != null">
+                stock = #{ticketDetailPO.stock},
+            </if>
+            <if test="ticketDetailPO.available != null">
+                available = #{ticketDetailPO.available},
+            </if>
+            gmt_modified = now()
+        </set>
+        WHERE id = #{ticketDetailPO.id}
+    </update>
+
+    <!--删除TicketDetail对象-->
+    <delete id="deleteTicketDetail">
+        DELETE  FROM ticket_detail WHERE  id = #{ticketDetailId}
+    </delete>
+
+    <!--删除TicketDetail对象-->
+    <delete id="deleteDetailsByTicketId">
+        DELETE  FROM ticket_detail WHERE  ticket_id = #{ticketId}
+    </delete>
+
+    <!--根据id查找TicketDetail对象-->
+    <select id="findOne" resultType="TicketDetailPO">
+        SELECT
+        id, ticket_id, departure_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM ticket_detail WHERE  id = #{ticketDetailId}
+    </select>
+
+    <!--根据跟团游id查找TicketDetail对象-->
+    <select id="findAllByTicketId" resultType="TicketDetailPO">
+        SELECT
+        id, ticket_id, departure_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM ticket_detail WHERE  ticket_id = #{ticketId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="TicketDetailPO">
+        SELECT
+        id, ticket_id, departure_time, price, stock, available,
+        gmt_create,gmt_modified
+        FROM ticket_detail
+    </select>
+
+</mapper>

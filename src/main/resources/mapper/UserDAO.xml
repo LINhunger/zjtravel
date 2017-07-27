@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.UserDAO">
+
+    <!--插入User对象-->
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="userPO.id">
+        INSERT  into user(username,password,salt,phone,
+        role_ids,locked,gmt_create,gmt_modified)
+        VALUES (#{userPO.username},#{userPO.password},#{userPO.salt},#{userPO.phone},#{userPO.roleIdsStr},
+        #{userPO.locked},now(),now())
+    </insert>
+
+    <!--更新User对象-->
+    <update id="updateUser">
+        UPDATE
+        user
+        <set>
+            <if test="userPO.username != null and userPO.username != ''">
+                username = #{userPO.username},
+            </if>
+            <if test="userPO.password != null and userPO.password != ''">
+                password = #{userPO.password},
+            </if>
+            <if test="userPO.salt != null and userPO.salt != ''">
+                salt = #{userPO.salt},
+            </if>
+            <if test="userPO.phone != null and userPO.phone != ''">
+                phone = #{userPO.phone},
+            </if>
+            <if test="userPO.roleIdsStr != null and userPO.roleIdsStr != ''">
+                role_ids = #{userPO.roleIdsStr},
+            </if>
+            <if test="userPO.locked != null">
+                locked = #{userPO.locked},
+            </if>
+                gmt_modified = now()
+        </set>
+        WHERE id = #{userPO.id}
+    </update>
+
+    <!--删除用户对象-->
+    <delete id="deleteUser">
+        DELETE  FROM user WHERE  id = #{userId}
+    </delete>
+
+    <!--根据id查找用户对象-->
+    <select id="findOne" resultType="UserPO">
+        SELECT
+        id,  username, password, salt, phone , role_ids as roleIdsStr, locked,
+        gmt_create,gmt_modified
+        FROM user WHERE  id = #{userId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="UserPO">
+        SELECT
+        id,  username, password, salt, phone , role_ids as roleIdsStr, locked,
+        gmt_create,gmt_modified
+        FROM user
+    </select>
+
+    <select id="findByUsername" resultType="UserPO">
+        SELECT
+        id,  username, password, salt, phone , role_ids as roleIdsStr, locked,
+        gmt_create,gmt_modified
+        FROM user WHERE  username = #{username}
+    </select>
+
+    <select id="findByPhone" resultType="UserPO">
+        SELECT
+        id,  username, password, salt, phone , role_ids as roleIdsStr, locked,
+        gmt_create,gmt_modified
+        FROM user WHERE  phone = #{phone}
+    </select>
+</mapper>

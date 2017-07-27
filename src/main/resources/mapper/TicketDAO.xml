@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.TicketDAO">
+
+    <!--添加Ticket对象-->
+    <insert id="createTicket" useGeneratedKeys="true" keyProperty="ticketPO.id">
+        INSERT  into ticket(title,label,picture,location,
+        introduce,travel,discount_ids,available,
+        gmt_create,gmt_modified)
+        VALUES (#{ticketPO.title},#{ticketPO.labelsStr},#{ticketPO.picturesStr},#{ticketPO.location},
+        #{ticketPO.introduce},#{ticketPO.travel},#{ticketPO.discountIdsStr},
+        #{ticketPO.available},now(),now())
+    </insert>
+
+    <!--更新Ticket对象-->
+    <update id="updateTicket">
+        UPDATE
+        ticket
+        <set>
+            <if test="ticketPO.title != null and ticketPO.title != ''">
+                title = #{ticketPO.title},
+            </if>
+            <if test="ticketPO.labelsStr != null and ticketPO.labelsStr != ''">
+                label = #{ticketPO.labelsStr},
+            </if>
+            <if test="ticketPO.picturesStr != null and ticketPO.picturesStr != ''">
+                picture = #{ticketPO.picturesStr},
+            </if>
+            <if test="ticketPO.location != null and ticketPO.location != ''">
+                location = #{ticketPO.location},
+            </if>
+            <if test="ticketPO.introduce != null and ticketPO.introduce != ''">
+                introduce = #{ticketPO.introduce},
+            </if>
+            <if test="ticketPO.travel != null and ticketPO.travel != ''">
+                travel = #{ticketPO.travel},
+            </if>
+            <if test="ticketPO.discountIdsStr != null">
+                discount_ids = #{ticketPO.discountIdsStr},
+            </if>
+            <if test="ticketPO.available != null">
+                available = #{ticketPO.available},
+            </if>
+            gmt_modified = now()
+        </set>
+        WHERE id = #{ticketPO.id}
+    </update>
+
+    <!--删除Ticket对象-->
+    <delete id="deleteTicket">
+        DELETE  FROM ticket WHERE  id = #{ticketId}
+    </delete>
+
+    <!--根据id查找Ticket对象-->
+    <select id="findOne" resultType="TicketPO">
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM ticket WHERE  id = #{ticketId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="TicketPO">
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM ticket
+        ORDER BY gmt_modified DESC
+    </select>
+
+    <!--根据要求查找全部对象-->
+    <select id="findAllByMultipleCondition" resultType="TicketPO">--
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM ticket
+        <where>
+            <if test="condition.title != null and condition.title != ''">
+                title like concat("%",#{condition.title}, "%")
+            </if>
+            <if test="condition.labelsStr != null and condition.labelsStr != ''">
+                AND label like concat("%",#{condition.labelsStr}, "%")
+            </if>
+            <if test="condition.location != null and condition.location != ''">
+                AND location like concat("%",#{condition.location}, "%")
+            </if>
+            <if test="condition.available != null">
+                AND available= #{condition.available}
+            </if>
+        </where>
+        ORDER BY gmt_modified DESC
+    </select>
+</mapper>

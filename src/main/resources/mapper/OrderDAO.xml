@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.OrderDAO">
+
+    <!--添加Order对象-->
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderPO.id">
+        INSERT  into `order`(user_id,goods_id,goods_type,`number`,payment,
+        state,
+        gmt_create,gmt_modified)
+        VALUES (#{orderPO.userId},#{orderPO.goodsId},#{orderPO.goodsType},#{orderPO.number},#{orderPO.payment},
+        #{orderPO.state},now(),now())
+    </insert>
+
+    <!--更新Order对象-->
+    <update id="updateOrder">
+        UPDATE
+        `order`
+        <set>
+            <if test="orderPO.state != null">
+                state = #{orderPO.state},
+            </if>
+            <if test="orderPO.gmtModified != null">
+                gmt_modified = now(),
+            </if>
+        </set>
+        WHERE id = #{orderPO.id}
+    </update>
+
+    <!--删除Order对象-->
+    <delete id="deleteOrder">
+        DELETE  FROM  `order` WHERE  id = #{orderId}
+    </delete>
+
+    <!--根据id查找Order对象-->
+    <select id="findOne" resultType="OrderPO">
+        SELECT
+        id, user_id, goods_id, goods_type, `number`, payment, state,
+        gmt_create,gmt_modified
+        FROM  `order` WHERE  id = #{orderId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="OrderPO">
+        SELECT
+        id, user_id, goods_id, goods_type, `number`, payment, state,
+        gmt_create,gmt_modified
+        FROM  `order`
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!--查找用户全部对象-->
+    <select id="findUserOrder" resultType="OrderPO">
+        SELECT
+        id, user_id, goods_id, goods_type, `number`, payment, state,
+        gmt_create,gmt_modified
+        FROM  `order` WHERE  user_id = #{userId}
+        ORDER BY gmt_create DESC
+    </select>
+
+</mapper>

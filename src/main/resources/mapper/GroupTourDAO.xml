@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjtravel.dao.GroupTourDAO">
+
+    <!--添加GroupTour对象-->
+    <insert id="createGroupTour" useGeneratedKeys="true" keyProperty="groupTourPO.id">
+        INSERT  into group_tour(title,label,picture,location,
+        introduce,travel,discount_ids,available,
+        gmt_create,gmt_modified)
+        VALUES (#{groupTourPO.title},#{groupTourPO.labelsStr},#{groupTourPO.picturesStr},#{groupTourPO.location},
+        #{groupTourPO.introduce},#{groupTourPO.travel},#{groupTourPO.discountIdsStr},
+        #{groupTourPO.available},now(),now())
+    </insert>
+
+    <!--更新GroupTour对象-->
+    <update id="updateGroupTour">
+        UPDATE
+        group_tour
+        <set>
+            <if test="groupTourPO.title != null and groupTourPO.title != ''">
+                title = #{groupTourPO.title},
+            </if>
+            <if test="groupTourPO.labelsStr != null and groupTourPO.labelsStr != ''">
+                label = #{groupTourPO.labelsStr},
+            </if>
+            <if test="groupTourPO.picturesStr != null and groupTourPO.picturesStr != ''">
+                picture = #{groupTourPO.picturesStr},
+            </if>
+            <if test="groupTourPO.location != null and groupTourPO.location != ''">
+                location = #{groupTourPO.location},
+            </if>
+            <if test="groupTourPO.introduce != null and groupTourPO.introduce != ''">
+                introduce = #{groupTourPO.introduce},
+            </if>
+            <if test="groupTourPO.travel != null and groupTourPO.travel != ''">
+                travel = #{groupTourPO.travel},
+            </if>
+            <if test="groupTourPO.discountIdsStr != null">
+                discount_ids = #{groupTourPO.discountIdsStr},
+            </if>
+            <if test="groupTourPO.available != null">
+                available = #{groupTourPO.available},
+            </if>
+                gmt_modified = now()
+        </set>
+        WHERE id = #{groupTourPO.id}
+    </update>
+
+    <!--删除GroupTour对象-->
+    <delete id="deleteGroupTour">
+        DELETE  FROM group_tour WHERE  id = #{groupTourId}
+    </delete>
+
+    <!--根据id查找GroupTour对象-->
+    <select id="findOne" resultType="GroupTourPO">
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM group_tour WHERE  id = #{groupTourId}
+    </select>
+
+    <!--查找全部对象-->
+    <select id="findAll" resultType="GroupTourPO">
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM group_tour
+        ORDER BY gmt_modified DESC
+    </select>
+
+    <!--根据要求查找全部对象-->
+    <select id="findAllByMultipleCondition" resultType="GroupTourPO">--
+        SELECT
+        id,  title, label as labelsStr, picture as picturesStr, location, introduce, travel, discount_ids as discountIdsStr, available,
+        gmt_create,gmt_modified
+        FROM group_tour
+        <where>
+           <if test="condition.title != null and condition.title != ''">
+                title like concat("%",#{condition.title}, "%")
+            </if>
+            <if test="condition.labelsStr != null and condition.labelsStr != ''">
+                AND label like concat("%",#{condition.labelsStr}, "%")
+             </if>
+            <if test="condition.location != null and condition.location != ''">
+                AND location like concat("%",#{condition.location}, "%")
+            </if>
+            <if test="condition.available != null">
+                AND available= #{condition.available}
+            </if>
+        </where>
+        ORDER BY gmt_modified DESC
+    </select>
+</mapper>

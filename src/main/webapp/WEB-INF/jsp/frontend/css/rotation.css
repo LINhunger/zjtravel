@@ -1,0 +1,97 @@
+@charset "utf-8";
+/* CSS Document */
+.center_area{
+    width:100%;
+    height:500px;
+    margin:0 auto;
+}
+
+
+/*中间区域*/
+.center_area .center{
+    width:100%;
+    height:500px;
+    background:#ccc;
+    float: left;
+}
+.common_da{ width: 800px; height: 100px;}
+.center_area .center .center_top{
+    width:100%;
+    height:440px;
+    /*background: orange;*/
+}
+/*<==================================================>*/
+
+/*中间轮播图区域*/
+
+.content_middle{
+    width:100%;
+    height:440px;
+    margin:0px auto;
+    position:relative;
+    border: 1px solid #ccc;
+}
+.content_middle:hover .common{
+    display: block;
+}
+/*左右切换图标*/
+.content_middle .common{
+    display: block;
+    width:50px;
+    height: 100px;
+    position: absolute;
+    z-index: 25;
+    top:50%;
+    margin-top: -50px;
+    display: none;
+}
+.content_middle .btnLeft{
+    opacity: 0.5;
+    left:0px;
+    background: url(../images/sprite.png) no-repeat;
+}
+.content_middle .btnRight{
+    opacity: 0.5;
+    right:0px;
+    background: url(../images/sprite.png) no-repeat -60px 0;
+}
+/*左右切换图标*/
+.content_middle ul li{
+    width:100%;
+    height:440px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    position: absolute;
+    margin:0px auto;
+}
+
+/*切换小图标*/
+
+.content_middle .table{
+    width:740px;
+    height:33px;
+    position: absolute;
+    bottom:10px;
+    left:50%;
+    z-index:9;
+    margin-left:-355px;
+    line-height: 24px;
+}
+.content_middle .table a{
+    width:115px;
+    height:33px;
+    background:#E3DEE1;
+    opacity: 0.8;
+    text-align:center;
+    line-height: 33px;
+    margin-left:3px;
+    display: block;
+    float:left;
+}
+
+.content_middle .table a.small_active{
+    background:#FF8800;
+    color: #fff;
+
+}
+
