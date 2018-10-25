@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="exploded-war" name="zjtravel_exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/zjtravel_exploded</output-path>
-    <root id="root">
-      <element id="artifact" artifact-name="zjtravel" />
-    </root>
-  </artifact>
-</component>
